@@ -239,9 +239,6 @@ func (s *Server) Run(version string) error {
 		TLSNextProto: map[string]func(*http.Server, *tls.Conn, http.Handler){},
 		//address
 		Addr: s.mainAddr,
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
 		//handler stack
 		Handler: h,
 	}

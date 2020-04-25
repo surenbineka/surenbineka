@@ -1,0 +1,37 @@
+<!-- <div class="icon-container"> -->
+<i class="wrapper icon">
+  <i ng-if="isdir()" ng-class="icon()" ng-click="toggle()"></i>
+  <i ng-if="isfile()" ng-class="icon()"></i>
+</i>
+<!-- </div> -->
+
+<div class="content">
+  <div class="header">
+    <a ng-if="!isdownloading()" ng-href="download/{{ node.$path }}" class="breall">{{ node.Name }}</a>
+    <span ng-if="isfile() && isdownloading()" class="breall">{{ node.Name }}</span>
+    
+  </div>
+  <div class="description breall">
+    <span ng-if="!isdownloading()" class="">
+      <a ng-href="download/{{ node.$path }}" class="ui label green" style="padding: .3em .7em;"><i class="cloud download icon"></i>Download</a>
+      <a ng-show="isfile() && (imagePreview || videoPreview || audioPreview)" ng-click="togglePreview()" class="ui label blue" style="padding: .3em .7em;"><i class="{{ showPreview ? 'circle outline' : 'video play outline' }} icon"></i>Preview</a>
+      <a ng-show="isdir() && closed()" ng-click="toggle()" class="ui label" style="padding: .3em .7em;"><i class="folder open icon"></i>Open folder</a>
+      <a ng-show="isdir() && !closed()" ng-click="toggle()" class="ui label blue" style="padding: .3em .7em;"><i class="folder icon"></i>Close folder</a>
+      <a ng-show="canremovable() && !confirm && !deleting" ng-click="preremove()" class="ui label red" style="padding: .3em .7em;"><i class="trash icon"></i>Delete</a>
+      <a ng-show="canremovable() && !deleting && confirm" ng-click="remove();" class="ui label red" style="padding: .3em .7em;"><i class="check icon"></i>Confirm delete</a>
+      <a ng-show="canremovable() && deleting" class="ui label" style="padding: .3em .7em;"><i class="notched circle loading icon"></i>Deleting</a>
+    </span>  {{ node.Size | bytes }} - {{ ago(node.Modified) }}</div>
+  <div class="preview" ng-if="showPreview">
+    <audio ng-if="audioPreview" controls>
+      <source ng-src="{{ showPreview ? ('download/'+node.$path) : '' }}">
+    </audio>
+    <img ng-if="imagePreview" ng-src="{{ showPreview ? ('download/'+node.$path) : '' }}">
+    <video controls autoplay ng-if="videoPreview">
+      <source ng-src="{{ showPreview ? ('download/'+node.$path) : '' }}">
+    </video>
+  </div>
+  <div class="list" ng-if="isdir() && !closed()">
+    <div class="item" ng-repeat="node in node.Children | orderBy:'Modified':true" ng-controller="NodeController" ng-include
+      src="'template/download-tree.html'"></div>
+  </div>
+</div>

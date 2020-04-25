@@ -1,0 +1,163 @@
+<html ng-app="app">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="robots" content="index,follow">
+	<meta name="googlebot" content="index">
+	<title>TorrentFast.net - Search, Stream, Watch online & Download!</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="description" content="Enjoy faster speed, no limits when downloading torrents.">
+	<link rel="shortcut icon" href="/cloud-favicon.png" />
+	
+	<meta property="og:site_name" content="torrentfast.net" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://torrentfast.net" />
+	<meta property="og:title" content="TorrentFast.net - Search, Stream, Watch online & Download!" />
+	<meta property="og:description" content="Enjoy faster speed, no limits when downloading torrents." />
+	<meta property="og:image" content="http://torrentfast.net/og-image.png" />
+	<meta property="og:image:width" content="600" />
+	<meta property="og:image:height" content="600" />.
+	
+	<link rel="stylesheet" type="text/css" href="css/Lato/Lato.css">
+	<link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+	<link rel="stylesheet" type="text/css" href="css/app.css?CLDVER">
+	
+	<style type="text/css">
+		[ng-cloak] {
+			display: none;
+		}
+	</style>
+</head>
+
+<body class="app">
+	<div ng-cloak class="cage" ondropfile="uploadTorrent($event)" placeholder="Drop torrent files here">
+		<div ng-if="!connected" class="connect-warning ui inverted vertical masthead center aligned segment">
+			<div class="ui text container">
+				<h1 class="ui inverted header">
+					{{ hasConnected ? 'Disconnected' : 'Connecting' }}
+				</h1>
+				<h1 class="ui inverted header">
+					<i class="red lightning icon"></i>
+				</h1>
+			</div>
+		</div>
+		<!-- TITLE ===================== -->
+		<div class="title">
+			<h2>
+				<a href="https://torrentfast.net">
+					<i class="blue icon cloud"></i> TorrentFast.net
+				</a>
+			</h2>
+			<div class="status">
+				<i ng-show="request.count > 0" class="ui circular loading repeat icon"></i>
+				<i ng-click="toggleSections('rss')" class="ui circular rss square icon"
+					ng-class="{orange: state.LatestRSSGuid != storage.tcRSSGUID, green: $root.omni.mode.rss }"
+					title="RSS List"></i>
+				<i ng-click="toggleSections('omni')" ng-class="{green: $root.omni.edit}" title="Edit Magnet/Torrent"
+					class="ui circular magnet icon"></i>
+				<i class="ui circular lightning icon" title="Connecting Status"
+					ng-class="{ green: connected, red: !connected }"></i>
+			</div>
+		</div>
+		<!-- GLOBAL ERROR MESSAGE ===================== -->
+		<div ng-if="$root.err" class="ui error message">
+			<i class="close icon" ng-click="$root.err = null"></i>
+			<div class="header">Error</div>
+			<p>{{$root.err}}</p>
+		</div>
+		<div ng-if="$root.info" class="ui info message">
+			<i class="close icon" ng-click="$root.info = null"></i>
+			<div class="header">Info</div>
+			<p>{{$root.info}}</p>
+		</div>
+
+		<section class="config" ng-controller="ConfigController" ng-include src="'template/config.html?CLDVER'">
+		</section>
+		<section class="omni" ng-controller="OmniController" ng-include src="'template/omni.html?CLDVER'"></section>
+		<section class="torrents" ng-controller="TorrentsController" ng-include src="'template/torrents.html?CLDVER'">
+		</section>
+		<section class="downloads" ng-controller="DownloadsController" ng-include
+			src="'template/downloads.html?CLDVER'"></section>
+		<div class="ui grid section-header">
+			<div class="column">
+				<span class="ui header">
+				Service Status
+					<span class="ui label">
+						<i class="hdd icon"></i>Online
+					</span>
+				</span>
+			</div>
+		</div>
+		&emsp; This service is totally free now, but we need your finacial help to keep this free further more & increase service capability-storages. You can donate via Paypal by clicking the button below. Contact Us: support@torrentfast.net<br><br><b>What's next?</b><br> &emsp; Downloaded files can be deleted only after 12 hours left. UI changes has been made. File pause/resume support when downloading is to be added.<br><br>Next Milistone: Reaching 50$ (Move onto powerful server)<br>For now: 12$ of 50$ received. (Last updated: 2020.04.24 9.27pm)<br><br>
+		<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="text-align:center;margin-bottom:15px;">
+			<input type="hidden" name="cmd" value="_s-xclick" />
+			<input type="hidden" name="hosted_button_id" value="DNYDB7QX978NJ" />
+			<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+			<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+		</form>
+
+		<footer style="opacity: 1;">
+			<div>
+				<span ng-if="numKeys(state.Users) > 1">{{ numKeys(state.Users) }} users connected - </span>
+				<span>
+					<a rel="noreferrer" href="https://torrentfast.net">www.torrentfast.net</a>
+				</span>
+			</div>
+			<div>
+				<span ng-if="state.Stats.System.set">
+					<span ng-click="toggleSections('enginedebug')">ShowDebugInfo,</span>
+					<span>
+						disk {{ state.Stats.System.diskUsedPercent | round }}%,
+					</span>
+				</span>
+				<span ng-if="state.Stats.Uptime">up {{ ago(state.Stats.Uptime) }}</span>
+			</div>
+		</footer>
+		<div ng-if="$root.showEnineStatus" class="ui attached mini message">
+			<i ng-click="$root.showEnineStatus = false" class="close icon"></i>
+			<div class="header">
+				System Info
+			</div>
+			<p ng-if="state.Stats.System.set">
+				<span>
+					goroutines {{ state.Stats.System.goRoutines }},
+				</span>
+				<span>
+					gomem {{ state.Stats.System.goMemory | bytes }},
+				</span>
+				<span>
+					cpu {{ state.Stats.System.cpu | round }}%,
+				</span>
+				<span>
+					mem {{ state.Stats.System.memUsedPercent | round }}%,
+				</span>
+				<span>
+					disk {{ state.Stats.System.diskUsedPercent | round }}%,
+				</span>
+				<span ng-if="state.Stats.Uptime">up {{ ago(state.Stats.Uptime) }}</span>
+			</p>
+			<div class="header">
+				Torrent Engine Status
+			</div>
+			<p>
+				<pre>{{ EngineStatus }}</pre>
+			</p>
+		</div>
+	</div>
+	<script src="js/vendor/query-string.js"></script>
+	<script src="js/vendor/angular.min.js"></script>
+	<script src="js/vendor/moment.min.js"></script>
+	<script src="js/velox.js?CLDVER"></script>
+	<script>
+		window.app = window.angular.module('app', []);
+	</script>
+	<script src="js/config-controller.js?CLDVER"></script>
+	<script src="js/omni-controller.js?CLDVER"></script>
+	<script src="js/torrents-controller.js?CLDVER"></script>
+	<script src="js/downloads-controller.js?CLDVER"></script>
+	<script src="js/utils.js?CLDVER"></script>
+	<script src="js/semantic-checkbox.js?CLDVER"></script>
+	<script src="js/run.js?CLDVER"></script>
+</body>
+</html>

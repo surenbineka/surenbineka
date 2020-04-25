@@ -67,11 +67,12 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				defer f.Close()
-				w.Header().Set("Accept-Ranges", "bytes")
-				w.Header().Set("Content-Length", strconv.FormatInt(info.Size(), 10))
-				//http.ServeContent(w, r, info.Name(), info.ModTime(), f)
-				http.Error(w, "Testing error: File size: "+strconv.FormatInt(info.Size(), 10), http.StatusBadRequest)
-				return
+				w.Header().Add("Content-Disposition", "attachment; filename=\""+info.Name()+"\"")
+				w.Header().Add("Accept-Ranges", "bytes")
+				w.Header().Add("Content-Length", strconv.FormatInt(info.Size(), 10))
+				
+				w.WriteHeader(http.StatusOK)
+				http.ServeContent(w, r, info.Name(), info.ModTime(), f)
 			}
 		case "DELETE":
 			if err := os.RemoveAll(file); err != nil {

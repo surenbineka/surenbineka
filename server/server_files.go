@@ -70,7 +70,7 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Accept-Ranges", "bytes")
 				w.Header().Set("Content-Length", strconv.FormatInt(info.Size(), 10))
 				//http.ServeContent(w, r, info.Name(), info.ModTime(), f)
-				http.Error(w, "Testing error: File size: "+strconv.FormatInt(info.Size(), 10)), http.StatusBadRequest)
+				http.Error(w, "Testing error: File size: "+strconv.FormatInt(info.Size(), 10), http.StatusBadRequest)
 				return
 			}
 		case "DELETE":

@@ -61,11 +61,13 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				a.AddDir(file)
 				a.Close()
 			} else {
-				w.Header().Set("Accept-Ranges", "bytes")
-				if w.Header().Get("Content-Encoding") == "" {
-					w.Header().Set("Content-Length", strconv.FormatInt(info.Size(), 10))
+				f, err := os.Open(file)
+				if err != nil {
+					http.Error(w, "File open error: "+err.Error(), http.StatusBadRequest)
+					return
 				}
-				http.ServeFile(w, r, file)
+				defer f.Close()
+				http.ServeContent(w, r, info.Name(), info.ModTime(), f)
 			}
 		case "DELETE":
 			if err := os.RemoveAll(file); err != nil {

@@ -67,6 +67,8 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				defer f.Close()
+				w.Header().Set("Accept-Ranges", "bytes")
+				w.Header().Set("Content-Length", strconv.FormatInt(info.Size(), 10))
 				http.ServeContent(w, r, info.Name(), info.ModTime(), f)
 			}
 		case "DELETE":

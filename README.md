@@ -34,7 +34,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/sashithacj/torrentfast.net/ma
 
 The script install a systemd unit (under `scripts/cloud-torrent.service`) as service. Read further intructions: [Auth And Security](https://github.com/sashithacj/torrentfast.net/wiki/AuthSecurity)
 
-## Docker [![Docker Pulls](https://img.shields.io/docker/pulls/sashithacj/cf24w6g66.svg)][dockerhub] [![Image Size](https://images.microbadger.com/badges/image/sashithacj/cf24w6g66.svg)][dockerhub]
+## Docker [![Docker Pulls](https://img.shields.io/docker/pulls/sashithacj/cf24w6g66.svg)][dockerhub] [![Image Size](https://images.microbadger.com/badges/version/sashithacj/cf24w6g66.svg)][dockerhub]
 
 [dockerhub]: https://hub.docker.com/r/sashithacj/cf24w6g66/
 

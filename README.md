@@ -4,6 +4,8 @@
 
 This project is re-branded from [simple-torrent](https://github.com/boypt/simple-torrent) by `boypt`.
 
+![screenshot](https://raw.githubusercontent.com/sashithacj/torrentfast.net/master/torrentfast-scr.png)
+
 # Features
 
 * UI changes to give the best experience

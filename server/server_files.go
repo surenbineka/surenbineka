@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-	"strconv"
+	//"strconv"
 
 	"github.com/jpillora/archive"
 )
@@ -69,8 +69,7 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				defer f.Close()
 				w.Header().Add("Content-Disposition", "attachment; filename=\""+info.Name()+"\"")
 				w.Header().Add("Accept-Ranges", "bytes")
-				fsize := strconv.FormatInt(info.Size(), 10)
-				//w.Header().Add("Content-Length", fsize)
+				//w.Header().Add("Content-Length", strconv.FormatInt(info.Size(), 10))
 				
 				w.WriteHeader(http.StatusOK)
 				http.ServeContent(w, r, info.Name(), info.ModTime(), f)

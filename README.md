@@ -1,10 +1,10 @@
+![screenshot](https://raw.githubusercontent.com/sashithacj/torrentfast.net/master/torrentfast-scr.png)
+
 ![Build Status](https://raw.githubusercontent.com/sashithacj/torrentfast.net/master/go-passing.svg) 
 
 **TorrentFast.net** is a a self-hosted remote torrent client, backend written in Go (golang), frontend written in AngularJS. Started torrents remotely, download sets of files on the local disk of the server, which are then retrievable or streamable via HTTP.
 
 This project is re-branded from [simple-torrent](https://github.com/boypt/simple-torrent) by `boypt`.
-
-![screenshot](https://raw.githubusercontent.com/sashithacj/torrentfast.net/master/torrentfast-scr.png)
 
 # Features
 

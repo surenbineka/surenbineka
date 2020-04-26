@@ -52,8 +52,23 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		switch r.Method {
+		case "HEAD":
+			//if info.IsDir() {
+				
+			//} else {
+			//w.Header().Set("Content-Disposition", "attachment; filename=\""+info.Name()+".zip\"")
+			//http.ServeFile(w, r, file)
+			//}
+			http.Error(w, "Not allowed", http.StatusMethodNotAllowed)
 		case "GET":
 			if info.IsDir() {
+				w.Header().Set("Content-Disposition", "attachment; filename=\""+info.Name()+".zip\"")
+				if origin := r.Header.Get("Origin"); origin != "" {
+				    w.Header().Set("Access-Control-Allow-Origin", origin)
+				}
+				w.Header().Set("Access-Control-Allow-Methods", "GET, DELETE")
+				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token")
+				w.Header().Set("Access-Control-Allow-Credentials", "true")
 				w.Header().Set("Content-Type", "application/zip")
 				w.WriteHeader(200)
 				//write .zip archive directly into response
@@ -61,18 +76,23 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				a.AddDir(file)
 				a.Close()
 			} else {
-				f, err := os.Open(file)
-				if err != nil {
-					http.Error(w, "File open error: "+err.Error(), http.StatusBadRequest)
-					return
+				//f, err := os.Open(file)
+				//if err != nil {
+				//	http.Error(w, "File open error: "+err.Error(), http.StatusBadRequest)
+				//	return
+				//}
+				//defer f.Close()
+				w.Header().Set("Content-Disposition", "attachment; filename=\""+info.Name()+"\"")
+				if origin := r.Header.Get("Origin"); origin != "" {
+				    w.Header().Set("Access-Control-Allow-Origin", origin)
 				}
-				defer f.Close()
-				w.Header().Add("Content-Disposition", "attachment; filename=\""+info.Name()+"\"")
-				w.Header().Add("Accept-Ranges", "bytes")
+				w.Header().Set("Access-Control-Allow-Methods", "GET, DELETE")
+				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token")
+				w.Header().Set("Access-Control-Allow-Credentials", "true")
+				//w.Header().Add("Accept-Ranges", "bytes")
 				//w.Header().Add("Content-Length", strconv.FormatInt(info.Size(), 10))
-				
-				w.WriteHeader(http.StatusOK)
-				http.ServeContent(w, r, info.Name(), info.ModTime(), f)
+				//http.ServeContent(w, r, info.Name(), info.ModTime(), f)
+				http.ServeFile(w, r, file)
 			}
 		case "DELETE":
 			if err := os.RemoveAll(file); err != nil {

@@ -13,6 +13,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"io/ioutil"
 
 	eglog "github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
@@ -259,6 +260,17 @@ func (e *Engine) TaskRoutine() {
 					f.Path, "", "file",
 					e.cldServer.GetRestAPI(), f.Size, t.StartedAt.Unix()))
 			}
+		}
+	}
+	
+	dldir := e.config.DownloadDirectory
+	items, _ := ioutil.ReadDir(dldir)
+	for _, item := range items {
+		file := filepath.Join(dldir, item.Name())
+		info, err := os.Stat(file)
+		duration := time.Since(info.ModTime())
+		if ( duration.Hours() >= 48 ) {
+			err := os.RemoveAll(file)
 		}
 	}
 }

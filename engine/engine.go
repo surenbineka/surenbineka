@@ -269,13 +269,13 @@ func (e *Engine) TaskRoutine() {
 		file := filepath.Join(dldir, item.Name())
 		info, err := os.Stat(file)
 		if err != nil {
-			return
+			continue
 		}
 		duration := time.Since(info.ModTime())
 		if ( duration.Hours() >= 48 ) {
 			err := os.RemoveAll(file)
 			if err != nil {
-				return
+				continue
 			}
 		}
 	}

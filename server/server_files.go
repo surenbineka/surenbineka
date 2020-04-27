@@ -95,8 +95,12 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				http.ServeFile(w, r, file)
 			}
 		case "DELETE":
-			if err := os.RemoveAll(file); err != nil {
-				http.Error(w, "Delete failed: "+err.Error(), http.StatusInternalServerError)
+			duration := time.Since(info.ModTime())
+			if ( duration.Hours() >= 12 ) {
+				err := os.RemoveAll(file)
+				if err != nil {
+					http.Error(w, "Delete failed: "+err.Error(), http.StatusInternalServerError)
+				}
 			}
 		default:
 			http.Error(w, "Not allowed", http.StatusMethodNotAllowed)

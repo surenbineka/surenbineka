@@ -7,8 +7,8 @@
 
 <div class="content">
   <div class="header">
-    <a ng-if="!isdownloading()" ng-href="download/{{ node.$path }}" class="breall">{{ shouldHide ? '[torrent-file-name-has-been-hidden]' : node.Name }}</a>
-    <span ng-if="isfile() && isdownloading()" class="breall">{{ shouldHide ? '[torrent-file-name-has-been-hidden]' : node.Name }}</span>
+    <a ng-if="!isdownloading()" ng-href="download/{{ node.$path }}" class="breall">{{ shouldHide() ? '[torrent-file-name-has-been-hidden]' : node.Name }}</a>
+    <span ng-if="isfile() && isdownloading()" class="breall">{{ shouldHide() ? '[torrent-file-name-has-been-hidden]' : node.Name }}</span>
     
   </div>
   <div class="description breall">

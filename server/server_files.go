@@ -3,7 +3,7 @@ package server
 import (
 	"errors"
 	"fmt"
-	"io"
+	//"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-	"strconv"
+	//"strconv"
 
 	"github.com/jpillora/archive"
 )

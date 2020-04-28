@@ -77,10 +77,6 @@ app.controller("NodeController", function($scope, $rootScope, $http, $timeout) {
     }, 3000);
   };
 
-  //defaults
-  $scope.shouldHide = function() {
-    return n.$shouldHide;
-  };
   $scope.closed = function() {
     return n.$closed;
   };

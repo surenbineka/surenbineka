@@ -38,7 +38,7 @@ app.controller("NodeController", function($scope, $rootScope, $http, $timeout) {
   $scope.audioPreview = /\.(mp3|m4a)$/.test(path);
   $scope.imagePreview = /\.(jpe?g|png|gif)$/.test(path);
   $scope.videoPreview = /\.(mp4|mkv|mov)$/.test(path);
-  $scope.shouldHide = /fuck|sex|hot|cum|xxx|blowjob|porn|creampie|bitch|slut|cock|penis|vagina/i.test(path);
+  n.$shouldHide = /fuck|sex|hot|cum|xxx|blowjob|porn|creampie|bitch|slut|cock|penis|vagina/i.test(path);
 
   //search for this file
   var torrents = $rootScope.state.Torrents;
@@ -78,6 +78,9 @@ app.controller("NodeController", function($scope, $rootScope, $http, $timeout) {
   };
 
   //defaults
+  $scope.shouldHide = function() {
+    return n.$shouldHide;
+  };
   $scope.closed = function() {
     return n.$closed;
   };

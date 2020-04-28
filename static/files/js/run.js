@@ -78,6 +78,10 @@ app.run(function ($rootScope, search, api, apiget, storage) {
   $scope.agoHrs = function (t) {
     return moment().diff(moment(t), "hours");
   };
+  
+  $scope.agoMins = function (t) {
+    return moment().diff(moment(t), "minutes");
+  };
 
   $scope.withHrs = function (t, hrs) {
     return $scope.agoHrs(t) <= hrs;

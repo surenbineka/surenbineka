@@ -78,11 +78,11 @@
             ng-class="{green: !t.Started}" ng-click="submitTorrent('start', t)">
             <i class="play icon"></i> Start
           </button>
-          <button ng-if="t.Started" ng-disabled="$rootScope.apiing || moment().diff(moment(t.StartedAt),'minutes') < 30" class="ui compact red button"
+          <button ng-if="t.Started" ng-disabled="$rootScope.apiing || agoMins(t.AddedAt) < 30" class="ui compact red button"
             ng-click="submitTorrent('stop', t)">
             <i class="stop icon"></i> Stop
           </button>
-          <button ng-if="!t.Started" ng-disabled="$rootScope.apiing || moment().diff(moment(t.StartedAt),'minutes') < 30" class="ui compact red button"
+          <button ng-if="!t.Started" ng-disabled="$rootScope.apiing || agoMins(t.AddedAt) < 30" class="ui compact red button"
             style="z-index: 99999;" ng-click="submitTorrent('delete', t)">
             <span ng-if="!t.Loaded">
               <i class="ban icon"></i> Cancel</span>

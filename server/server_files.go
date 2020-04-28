@@ -54,12 +54,61 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 		}
 		switch r.Method {
 		case "HEAD":
-			//if info.IsDir() {
+			if info.IsDir() {
 				
-			//} else {
-			//w.Header().Set("Content-Disposition", "attachment; filename=\""+info.Name()+".zip\"")
-			//http.ServeFile(w, r, file)
-			//}
+			} else {
+				f, err := os.Open(file)
+				if err != nil {
+					http.Error(w, "File open error: "+err.Error(), http.StatusBadRequest)
+					return
+				}
+				defer f.Close()
+				
+				fileHeader := make([]byte, 512)
+				_, err = f.Read(fileHeader)	// File offset is now len(fileHeader)
+				if err != nil {
+					http.Error(w, "File read error: "+err.Error(), http.StatusBadRequest)
+					return
+				}
+				
+				w.Header().Set("Content-Disposition", "attachment; filename=\""+info.Name()+"\"")				
+				w.Header().Set("Content-Type", http.DetectContentType(fileHeader))				
+				w.Header().Set("Accept-Ranges", "bytes")
+				requestRange := r.Header.Get("range")
+				if requestRange == "" {
+					w.Header().Set("Content-Length", strconv.Itoa(int(info.Size())))
+					return
+				}
+				requestRange = requestRange[6:]
+				splitRange := strings.Split(requestRange, "-")
+				if len(splitRange) != 2 {
+					http.Error(w, "invalid values for header 'Range'", http.StatusBadRequest)
+					return
+				}
+				begin, err :=strconv.ParseInt(splitRange[0], 10, 64)
+				if err != nil {
+					http.Error(w, "File read error: "+err.Error(), http.StatusBadRequest)
+					return
+				}
+				end, err := strconv.ParseInt(splitRange[1], 10, 64)
+				if err != nil {
+					http.Error(w, "File read error: "+err.Error(), http.StatusBadRequest)
+					return
+				}
+				if begin > info.Size() || end > info.Size() {
+					http.Error(w, "File read error: range out of bounds for file", http.StatusBadRequest)
+					return
+				}
+
+				if begin >= end {
+					http.Error(w, "File read error: range begin cannot be bigger than range end", http.StatusBadRequest)
+					return
+				}
+				w.Header().Set("Content-Length", strconv.FormatInt(end-begin+1, 10))
+				w.Header().Set("Content-Range", fmt.Sprintf( "bytes %d-%d/%d", begin, end, info.Size()))
+				w.WriteHeader(http.StatusPartialContent)
+				return
+			}
 			http.Error(w, "Not allowed", http.StatusMethodNotAllowed)
 		case "GET":
 			if info.IsDir() {

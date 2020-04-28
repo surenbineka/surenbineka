@@ -57,6 +57,7 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 			if info.IsDir() {
 				
 			} else {
+				/*
 				f, err := os.Open(file)
 				if err != nil {
 					http.Error(w, "File open error: "+err.Error(), http.StatusBadRequest)
@@ -108,6 +109,7 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Content-Range", fmt.Sprintf( "bytes %d-%d/%d", begin, end, info.Size()))
 				w.WriteHeader(http.StatusPartialContent)
 				return
+				*/
 			}
 			http.Error(w, "Not allowed", http.StatusMethodNotAllowed)
 		case "GET":
@@ -120,6 +122,9 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				a.AddDir(file)
 				a.Close()
 			} else {
+				w.Header().Set("Content-Disposition", "attachment; filename=\""+info.Name()+"\"")
+				http.ServeFile(w, r, file)
+				/*
 				f, err := os.Open(file)
 				if err != nil {
 					http.Error(w, "File open error: "+err.Error(), http.StatusBadRequest)
@@ -133,8 +138,9 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 					http.Error(w, "File read error: "+err.Error(), http.StatusBadRequest)
 					return
 				}
+				*/
 				
-				w.Header().Set("Content-Disposition", "attachment; filename=\""+info.Name()+"\"")				
+				/*
 				w.Header().Set("Content-Type", http.DetectContentType(fileHeader))				
 				w.Header().Set("Accept-Ranges", "bytes")
 				requestRange := r.Header.Get("range")
@@ -175,7 +181,7 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				f.Seek(begin, 0)
 				io.CopyN(w, f, end-begin)
 				return
-				
+				*/
 			}
 		case "DELETE":
 			duration := time.Since(info.ModTime())

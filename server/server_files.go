@@ -81,7 +81,8 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				fileHeader := make([]byte, 512)
 				_, err = f.Read(fileHeader)	// File offset is now len(fileHeader)
 				if err != nil {
-					return err
+					http.Error(w, "File read error: "+err.Error(), http.StatusBadRequest)
+					return
 				}
 				
 				w.Header().Set("Content-Disposition", "attachment; filename=\""+info.Name()+"\"")				
@@ -92,34 +93,39 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 					w.Header().Set("Content-Length", strconv.Itoa(int(info.Size())))
 					f.Seek(0, 0)
 					io.Copy(w, f)
-					return nil
+					return
 				}
 				requestRange = requestRange[6:]
 				splitRange := strings.Split(requestRange, "-")
 				if len(splitRange) != 2 {
-					return fmt.Errorf("invalid values for header 'Range'")
+					http.Error(w, "invalid values for header 'Range'", http.StatusBadRequest)
+					return
 				}
 				begin, err :=strconv.ParseInt(splitRange[0], 10, 64)
 				if err != nil {
-					return err
+					http.Error(w, "File read error: "+err.Error(), http.StatusBadRequest)
+					return
 				}
 				end, err := strconv.ParseInt(splitRange[1], 10, 64)
 				if err != nil {
-					return err
+					http.Error(w, "File read error: "+err.Error(), http.StatusBadRequest)
+					return
 				}
 				if begin > info.Size() || end > info.Size() {
-					return fmt.Errorf("range out of bounds for file")
+					http.Error(w, "File read error: range out of bounds for file", http.StatusBadRequest)
+					return
 				}
 
 				if begin >= end {
-					return fmt.Errorf("range begin cannot be bigger than range end")
+					http.Error(w, "File read error: range begin cannot be bigger than range end", http.StatusBadRequest)
+					return
 				}
 				w.Header().Set("Content-Length", strconv.FormatInt(end-begin+1, 10))
 				w.Header().Set("Content-Range", fmt.Sprintf( "bytes %d-%d/%d", begin, end, info.Size()))
 				w.WriteHeader(http.StatusPartialContent)
 				f.Seek(begin, 0)
 				io.CopyN(w, f, end-begin)
-				return nil
+				return
 				
 			}
 		case "DELETE":

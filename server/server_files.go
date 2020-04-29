@@ -3,7 +3,7 @@ package server
 import (
 	"errors"
 	"fmt"
-	"io"
+	//"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-	"strconv"
+	//"strconv"
 
 	"github.com/jpillora/archive"
 )
@@ -124,8 +124,8 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 			} else {
 				w.Header().Set("Transfer-Encoding", "identity")
 				w.Header().Set("Content-Disposition", "attachment; filename=\""+info.Name()+"\"")
-				//http.ServeFile(w, r, file)
-				
+				http.ServeFile(w, r, file)
+				/*
 				f, err := os.Open(file)
 				if err != nil {
 					http.Error(w, "File open error: "+err.Error(), http.StatusBadRequest)
@@ -180,6 +180,7 @@ func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request) {
 				f.Seek(begin, 0)
 				io.CopyN(w, f, end-begin)
 				return
+				*/
 				
 			}
 		case "DELETE":

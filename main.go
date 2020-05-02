@@ -13,8 +13,8 @@ var VERSION = "0.0.0-src" //set with ldflags
 
 func main() {
 	s := server.Server{
-		Title: "SimpleTorrent",
-		Port:  3000,
+		Title: "torrentfast.net",
+		Port:  80,
 	}
 
 	o := opts.New(&s)
@@ -28,7 +28,7 @@ func main() {
 		log.SetFlags(0)
 	}
 
-	log.Printf("############# SimpleTorrent ver[%s] #############\n", VERSION)
+	log.Printf("############# torrentfast.net ver[%s] #############\n", VERSION)
 	if err := s.Run(VERSION); err != nil {
 		if errors.Is(err, server.ErrDiskSpace) {
 			log.Println(err)

@@ -2,7 +2,7 @@ version: '3.3'
 services:
     cloud-torrent:
         ports:
-            - '3000:3000'
+            - '80:80'
         volumes:
             - '/path/to/my/downloads:/downloads'
             - '/path/to/my/torrents:/torrents'

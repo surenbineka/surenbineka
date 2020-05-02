@@ -67,7 +67,7 @@ cat <<EOF
 #################################################################
               TorrentFast.net installed successfuly.
 
-Open browser to http://${HOSTIP}:3000/ now!
+Open browser to http://${HOSTIP}:80/ now!
 
 * Default DownloadDirectory: /root/downloads
 * Default Config file: /root/cloud-torrent.json

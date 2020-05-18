@@ -10,19 +10,23 @@ This project is re-branded from [simple-torrent](https://github.com/boypt/simple
 
 * UI changes to give the best experience
 * Downoaded files can be deleted in frontend only after 12 hours left
-* File Pause/Resume support (Still developing, need support!)
+* Downoaded files will be automatically deleted by the system after 2 days
+* Porn torrent names will be hidden
+* File Pause/Resume support (Using apache, thanks to [Navinda](https://github.com/ipmanlk))
 
-Also:
-* Single binary
-* Cross platform
-* Embedded torrent search
-* Real-time updates
-* Mobile-friendly
-* Fast [content server](http://golang.org/pkg/net/http/#ServeContent)
-* IPv6 out of the box
-* Updated torrnet engine from [anacrolix/torrent](https://github.com/anacrolix/torrent)
 
 # Install
+
+## Source
+
+**Requirement**
+- Latest [Golang](https://golang.org/dl/) (Go 1.13+)
+
+``` sh
+$ git clone https://github.com/sashithacj/torrentfast.net.git
+$ cd torrentfast.net
+$ sudo bash run.sh
+```
 
 ## Binary
 
@@ -40,17 +44,6 @@ The script install a systemd unit (under `scripts/cloud-torrent.service`) as ser
 
 ``` sh
 $ docker run -d -p 80:80 --restart always -v /root/downloads:/downloads sashithacj/cf24w6g66:latest --port 80
-```
-
-## Source
-
-**Requirement**
-- Latest [Golang](https://golang.org/dl/) (Go 1.13+)
-
-``` sh
-$ git clone https://github.com/sashithacj/torrentfast.net.git
-$ cd torrentfast.net
-$ ./scripts/make_release.sh
 ```
 
 # Usage

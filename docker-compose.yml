@@ -1,18 +1,18 @@
 version: "3.3"
 services:
     cloud-torrent:
-        container_name: "cloud-torrent-v2"
+        container_name: "cloud-torrent"
+        build:
+            context: "."
         ports:
             - 80:80
         volumes:
             - "./files/downloads:/downloads"
             - "./files/torrents:/torrents"
             - "./files/config:/etc/cloud-torrent"
-        image: sashithacj/cf24w6g66
-        command: --auth username:password
 
     cloud-torrent-files:
-        container_name: "cloud-torrent-files-v2"
+        container_name: "cloud-torrent-files"
         build:
             context: ./fileserver
         volumes:

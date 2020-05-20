@@ -7,13 +7,15 @@
 
 <div class="content">
   <div class="header">
-    <a ng-if="!isdownloading()" ng-href="http://static.torrentfast.net:3000/files/{{ node.$path }}" class="breall">{{ node.$shouldHide ? '[torrent-file-name-has-been-hidden]' : node.Name }}</a>
+    <a ng-if="!isdownloading() && isfile()" ng-href="http://static.torrentfast.net:3000/files/{{ node.$path }}" class="breall">{{ node.$shouldHide ? '[torrent-file-name-has-been-hidden]' : node.Name }}</a>
+    <a ng-if="!isdownloading() && !isfile()" ng-href="download/{{ node.$path }}" class="breall">{{ node.$shouldHide ? '[torrent-folder-name-has-been-hidden]' : node.Name }}</a>
     <span ng-if="isfile() && isdownloading()" class="breall">{{ node.$shouldHide ? '[torrent-file-name-has-been-hidden]' : node.Name }}</span>
     
   </div>
   <div class="description breall">
     <span ng-if="!isdownloading()" class="">
-      <a ng-href="http://static.torrentfast.net:3000/files/{{ node.$path }}" class="ui label green" style="padding: .3em .7em;"><i class="cloud download icon"></i>Download</a>
+      <a ng-if="isfile()" ng-href="http://static.torrentfast.net:3000/files/{{ node.$path }}" class="ui label green" style="padding: .3em .7em;"><i class="cloud download icon"></i>Download</a>
+      <a ng-if="!isfile()" ng-href="download/{{ node.$path }}" class="ui label green" style="padding: .3em .7em;"><i class="cloud download icon"></i>Download As Zip</a>
       <a ng-show="isfile() && (imagePreview || videoPreview || audioPreview)" ng-click="togglePreview()" class="ui label blue" style="padding: .3em .7em;"><i class="{{ showPreview ? 'circle outline' : 'video play outline' }} icon"></i>Preview</a>
       <a ng-show="isdir() && closed()" ng-click="toggle()" class="ui label" style="padding: .3em .7em;"><i class="folder open icon"></i>Open folder</a>
       <a ng-show="isdir() && !closed()" ng-click="toggle()" class="ui label blue" style="padding: .3em .7em;"><i class="folder icon"></i>Close folder</a>

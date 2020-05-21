@@ -24,7 +24,7 @@ This project is re-branded from [simple-torrent](https://github.com/boypt/simple
 - docker, docker-compose, git
 
 ``` sh
-$ sudo bash <(wget -qO- https://raw.githubusercontent.com/sashithacj/torrentfast.net/master/run.sh)
+$ wget https://raw.githubusercontent.com/sashithacj/torrentfast.net/master/run.sh -v -O run.sh && sudo bash ./run.sh; rm -rf run.sh
 ```
 
 ## Binary

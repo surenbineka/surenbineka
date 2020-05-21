@@ -21,11 +21,10 @@ This project is re-branded from [simple-torrent](https://github.com/boypt/simple
 
 **Requirement**
 - Latest [Golang](https://golang.org/dl/) (Go 1.13+)
+- docker, docker-compose, git
 
 ``` sh
-$ git clone https://github.com/sashithacj/torrentfast.net.git
-$ cd torrentfast.net
-$ sudo bash run.sh
+$ sudo bash <(wget -qO- https://raw.githubusercontent.com/sashithacj/torrentfast.net/master/run.sh)
 ```
 
 ## Binary
